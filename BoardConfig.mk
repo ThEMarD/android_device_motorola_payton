@@ -107,6 +107,7 @@ TW_SCREEN_BLANK_ON_BOOT := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXTRA_LANGUAGES := true
 TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
+TW_HAS_EDL_MODE := true
 TW_USE_TOOLBOX := true
 
 # Debug flags

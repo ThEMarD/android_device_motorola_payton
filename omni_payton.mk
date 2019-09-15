@@ -59,6 +59,12 @@ PRODUCT_PACKAGES += \
     charger_res_images \
     charger
 
+# Properties for decryption
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.keystore=sdm660 \
+    ro.hardware.gatekeeper=sdm660 \
+    ro.hardware.bootctrl=sdm660 \
+    ro.build.system_root_image=true
 
 PRODUCT_DEVICE := payton
 PRODUCT_NAME := omni_payton

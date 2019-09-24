@@ -107,6 +107,7 @@ TW_SCREEN_BLANK_ON_BOOT := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXTRA_LANGUAGES := true
 TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
+TW_INCLUDE_REPACKTOOLS := true
 TW_HAS_EDL_MODE := true
 TW_USE_TOOLBOX := true
 
@@ -115,5 +116,4 @@ TW_USE_TOOLBOX := true
 #TARGET_USES_LOGD := true
 
 # Workaround for error copying vendor files to recovery ramdisk
-TARGET_COPY_OUT_VENDOR := system/vendor
-TW_INCLUDE_REPACKTOOLS := true
+TARGET_COPY_OUT_VENDOR := vendor

@@ -22,5 +22,5 @@
 /bt_firmware     ext4      /dev/block/bootdevice/by-name/bluetooth                flags=backup=1;display="Bluetooth";slotselect
 
 # Removable storage
-/external_sd     auto      /dev/block/mmcblk0p1    /dev/block/mmcblk1             flags=display="Micro SDcard";storage;wipeingui;removable
-/usb-otg         auto      /dev/block/sdg1         /dev/block/sda                 flags=display="USB OTG";storage;wipeingui;removable
+/external_sd     auto      /dev/block/mmcblk1p1    /dev/block/mmcblk1             flags=display="MicroSD Card";storage;wipeingui;removable
+/usb_otg         auto      /dev/block/sdg1         /dev/block/sdg                 flags=display="USB OTG";storage;wipeingui;removable

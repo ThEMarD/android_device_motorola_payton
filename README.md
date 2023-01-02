@@ -22,7 +22,7 @@ Storage | 32, 64GB
 Battery | 3000 mAh
 Dimensions | 148.4 x 73.4 x 8 mm (5.84 x 2.89 x 0.31 in)
 Display | 1080 x 1920 pixels, 5.2" LTPS IPS LCD 16:9 ratio (~424 ppi density)
-Rear Camera 1 (main | 12 MP f/2.0 1.4-micron pixels and dual pixel autofocus
+Rear Camera 1 (main) | 12 MP f/2.0 1.4-micron pixels and dual pixel autofocus
 Rear Camera 2 (ultrawide) | 8 MP f/2.2 and fixed focus
 Front Camera | 16 MP with flash and fixed focus
 

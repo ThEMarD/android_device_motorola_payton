@@ -1,18 +1,9 @@
 #
 # Copyright (C) 2018 The Android Open Source Project
-# Copyright (C) 2019-2022 TeamWin Recovery Project
+# Copyright (C) 2019-2023 TeamWin Recovery Project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-
-# This contains the module build definitions for the hardware-specific
-# components for this device.
-#
-# As much as possible, those components should be built unconditionally,
-# with device-specific names to avoid collisions, to avoid device-specific
-# bitrot and build breakages. Building a component unconditionally does
-# *not* include it on all devices, so it is safe even with hardware-specific
-# components.
 
 # Default device path
 DEVICE_PATH := device/$(PRODUCT_BRAND)/$(TARGET_DEVICE)
@@ -30,7 +21,7 @@ TARGET_2ND_ARCH_VARIANT := $(TARGET_ARCH_VARIANT)
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := $(TARGET_CPU_VARIANT)
-TARGET_2ND_CPU_VARIANT_RUNTIME := $(TARGET_CPU_VARIANT_RUNTIME)
+TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a73
 
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
@@ -39,6 +30,13 @@ ENABLE_SCHEDBOOST := true
 TARGET_BOOTLOADER_BOARD_NAME := $(PRODUCT_PLATFORM)
 TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
+
+# Platform
+TARGET_BOARD_PLATFORM := $(TARGET_BOOTLOADER_BOARD_NAME)
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno512
+TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
+QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
+BOARD_PROVIDES_GPTUTILS := true
 
 # Kernel
 BOARD_KERNEL_BASE := 0x00000000
@@ -67,11 +65,8 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
   TARGET_KERNEL_SOURCE := kernel/motorola/msm8998
 endif
 
-# Platform
-TARGET_BOARD_PLATFORM := $(TARGET_BOOTLOADER_BOARD_NAME)
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno512
-TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
-QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
+# Assert
+TARGET_OTA_ASSERT_DEVICE := payton
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
@@ -93,8 +88,27 @@ BOARD_ROOT_EXTRA_FOLDERS := bt_firmware \
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
 
+# Enable A/B Specific Flags
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+BOARD_USES_RECOVERY_AS_BOOT := true
+
+# Encryption
+BOARD_USES_QCOM_FBE_DECRYPTION := true
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_RESETPROP := true
+TW_USE_FSCRYPT_POLICY := 1
+PLATFORM_SECURITY_PATCH := 2127-12-31
+PLATFORM_VERSION := 16.1.0
+PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
+VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
+
+# Extras
+BOARD_SUPPRESS_SECURE_ERASE := true
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+
 # Recovery
-TARGET_OTA_ASSERT_DEVICE := payton
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_RECOVERY_DEVICE_MODULES += \
@@ -102,48 +116,29 @@ TARGET_RECOVERY_DEVICE_MODULES += \
     libxml2 \
     vendor.display.config@1.0 \
     vendor.display.config@2.0
-
-# Enable A/B Specific Flags
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-BOARD_USES_RECOVERY_AS_BOOT := true
-
-# Encryption
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_RESETPROP := true
-TW_USE_FSCRYPT_POLICY := 1
-BOARD_USES_QCOM_FBE_DECRYPTION := true
-PLATFORM_VERSION := 16.1.0
-PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
-PLATFORM_SECURITY_PATCH := 2127-12-31
-PRODUCT_ENFORCE_VINTF_MANIFEST := true
-VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
-
-# TWRP specific build flags
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
-TW_THEME := portrait_hdpi
-TW_SCREEN_BLANK_ON_BOOT := true
-RECOVERY_SDCARD_ON_DATA := true
-BOARD_PROVIDES_GPTUTILS := true
-TARGET_RECOVERY_QCOM_RTC_FIX := true
-TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
-TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
-TW_MAX_BRIGHTNESS := 255
-TW_INCLUDE_NTFS_3G := true
-TW_EXTRA_LANGUAGES := true
-TW_INPUT_BLACKLIST := hbtp_vm
-TW_EXCLUDE_TWRPAPP := true
-TW_NO_USB_STORAGE := true
-TW_INCLUDE_REPACKTOOLS := true
-TW_HAS_EDL_MODE := true
-
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
 
+# TWRP specific build flags
+RECOVERY_SDCARD_ON_DATA := true
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+TARGET_USES_MKE2FS := true
+TW_THEME := portrait_hdpi
+TW_EXTRA_LANGUAGES := true
+TW_INCLUDE_NTFS_3G := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INPUT_BLACKLIST := hbtp_vm
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+TW_MAX_BRIGHTNESS := 255
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_EXCLUDE_TWRPAPP := true
+TW_HAS_EDL_MODE := true
+
 # TWRP Debug Flags
-#TWRP_EVENT_LOGGING := true
 TARGET_USES_LOGD := true
 TWRP_INCLUDE_LOGCAT := true
 TARGET_RECOVERY_DEVICE_MODULES += debuggerd
